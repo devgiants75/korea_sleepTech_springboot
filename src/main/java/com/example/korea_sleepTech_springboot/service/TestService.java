@@ -5,6 +5,7 @@ import com.example.korea_sleepTech_springboot.repository.TestRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TestService {
@@ -19,5 +20,18 @@ public class TestService {
 
     public List<TestEntity> getAllTests() {
         return testRepository.findAll(); // 전체 test 목록을 가져오기
+    }
+
+    public TestEntity createTest(TestEntity testEntity) {
+        return testRepository.save(testEntity);
+    }
+
+    public TestEntity getTestById(Long id) {
+        Optional<TestEntity> optionalTestEntity = testRepository.findById(id);
+
+        TestEntity test = optionalTestEntity.orElseThrow(() ->
+                new RuntimeException("해당 ID를 가진 데이터가 없습니다: " + id));
+
+        return test;
     }
 }

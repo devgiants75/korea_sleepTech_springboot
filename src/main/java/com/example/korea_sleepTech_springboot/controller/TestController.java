@@ -28,10 +28,16 @@ public class TestController {
     @Autowired // 필드 주입
     TestService testService;
 
-    @GetMapping
+    @GetMapping // GET + localhost:8080/test
     public List<TestEntity> getAllTests() {
         List<TestEntity> tests = testService.getAllTests();
         return tests;
+    }
+
+    @GetMapping("/{id}") // @메서드Mapping(추가 URI 지정) // GET + localhost:8080/test/숫자값
+    public TestEntity getTestById(@PathVariable Long id) { // @PathVariable: URL 경로에서 변수값을 포함하여 전달 (경로 변수를 표시)
+        TestEntity test = testService.getTestById(id);
+        return test;
     }
 
     @PostMapping
