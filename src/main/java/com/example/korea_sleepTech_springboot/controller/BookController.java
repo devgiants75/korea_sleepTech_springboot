@@ -46,14 +46,14 @@ public class BookController {
     }
 
     // 4) UPDATE - 책 수정 (특정 ID)
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<BookResponseDto> updateBook(@PathVariable Long id, @RequestBody BookUpdateRequestDto dto) {
         BookResponseDto book = bookService.updateBook(id, dto);
         return ResponseEntity.status(HttpStatus.OK).body(book);
     }
 
     // 5) DELETE - 책 삭제 (특정 ID)
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
         return ResponseEntity.noContent().build();
