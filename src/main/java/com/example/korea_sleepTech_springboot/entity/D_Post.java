@@ -10,6 +10,7 @@ import java.util.List;
 // : @Getter, @Setter, @ToString, @RequiredConstructor 등을 포함하는 어노테이션
 
 @Entity
+@Table(name = "post")
 @Getter
 @Setter
 @Builder
