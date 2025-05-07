@@ -1,5 +1,6 @@
 package com.example.korea_sleepTech_springboot.service.implementations;
 
+import com.example.korea_sleepTech_springboot.common.ResponseMessage;
 import com.example.korea_sleepTech_springboot.dto.request.PostCreateRequestDto;
 import com.example.korea_sleepTech_springboot.dto.response.PostDetailResponseDto;
 import com.example.korea_sleepTech_springboot.dto.response.ResponseDto;
@@ -34,6 +35,6 @@ public class PostServiceImpl implements PostService {
                 .author(saved.getAuthor())
                 .build();
 
-        return ResponseDto.setSuccess("게시글 등록이 성공적으로 완료되었습니다.", responseDto);
+        return ResponseDto.setSuccess(ResponseMessage.SUCCESS, responseDto);
     }
 }
