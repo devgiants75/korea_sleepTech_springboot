@@ -53,12 +53,14 @@ public class CommentServiceImpl implements CommentService {
 
         D_Comment savedComment = commentRepository.save(newComment);
 
-        responseDto = CommentResponseDto.builder()
-                .id(savedComment.getId())
-                .postId(savedComment.getPost().getId())
-                .content(savedComment.getContent())
-                .commenter(savedComment.getCommenter())
-                .build();
+//        responseDto = CommentResponseDto.builder()
+//                .id(savedComment.getId())
+//                .postId(savedComment.getPost().getId())
+//                .content(savedComment.getContent())
+//                .commenter(savedComment.getCommenter())
+//                .build();
+
+        responseDto = new CommentResponseDto.
 
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, responseDto);
     }
