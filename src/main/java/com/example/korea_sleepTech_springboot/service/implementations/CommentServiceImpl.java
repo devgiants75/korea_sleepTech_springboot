@@ -60,7 +60,13 @@ public class CommentServiceImpl implements CommentService {
 //                .commenter(savedComment.getCommenter())
 //                .build();
 
-        responseDto = new CommentResponseDto.
+//        responseDto = new CommentResponseDto.Builder("필수 값) 내용 입력", "필수 값) 작성자")
+//                .build();
+
+        responseDto = new CommentResponseDto.Builder(savedComment.getContent(), savedComment.getCommenter())
+                .id(savedComment.getId())
+                .postId(savedComment.getPost().getId())
+                .build();
 
         return ResponseDto.setSuccess(ResponseMessage.SUCCESS, responseDto);
     }
