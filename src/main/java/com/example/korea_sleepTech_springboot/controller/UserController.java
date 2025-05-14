@@ -2,15 +2,15 @@ package com.example.korea_sleepTech_springboot.controller;
 
 import com.example.korea_sleepTech_springboot.common.ApiMappingPattern;
 import com.example.korea_sleepTech_springboot.dto.response.ResponseDto;
+import com.example.korea_sleepTech_springboot.dto.user.request.UserUpdateRequestDto;
 import com.example.korea_sleepTech_springboot.dto.user.response.GetUserResponseDto;
 import com.example.korea_sleepTech_springboot.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /*
 * === UserController VS AuthController ===
@@ -57,17 +57,21 @@ public class UserController {
     }
 
     // 2) 회원 정보 수정
-
+    @PutMapping(PUT_USER_INFO)
+    public ResponseEntity<ResponseDto<GetUserResponseDto>> updateUserInfo(
+            @AuthenticationPrincipal String userEmail,
+            @Valid @RequestBody UserUpdateRequestDto dto
+            ) {
+        ResponseDto<GetUserResponseDto> response = userService.updateUserInfo(userEmail, dto);
+        return ResponseEntity.ok(response);
+    }
 
     // 3) 회원 탈퇴
-
-
-
-
-
-
-
-
-
-
+    @DeleteMapping(DELETE_USER)
+    public ResponseEntity<ResponseDto<Void>> deleteUser(
+            @AuthenticationPrincipal String userEmail
+    ){
+        ResponseDto<Void> response = userService.deleteUser(userEmail);
+        return ResponseEntity.noContent().build();
+    }
 }
