@@ -84,4 +84,36 @@ public class OrderServiceImp implements OrderService {
 
         return ResponseDto.setSuccess("주문이 성공적으로 완료되었습니다.", data);
     }
+
+    @Override
+    public ResponseDto<List<OrderResponseDto.OrderedItemInfo>> getOrderSummary(Long orderId) {
+        List<Object[]> rows = orderRepository.getOrderSummary(orderId);
+//        List<OrderSummaryProjection> rows = orderRepository.getOrderSummary(orderId);
+
+        List<OrderResponseDto.OrderedItemInfo> summary = new ArrayList<>();
+
+        for (Object[] row : rows) {
+            summary.add(OrderResponseDto.OrderedItemInfo.builder()
+                            // Object 객체 타입은 반드시 참조타입만 호환 가능
+                            // Object >> Number >> long 타입
+                            .productId(((Number)row[0]).longValue())
+                            .productName((String)row[2])
+                            .quantity(((Number)row[3]).intValue())
+                            .price(((Number)row[4]).intValue())
+                            .total(((Number)row[5]).intValue())
+                    .build());
+        }
+
+//        List<OrderResponseDto.OrderedItemInfo> summary = rows.stream().map(row ->
+//        OrderResponseDto.OrderedItemInfo.builder()
+//            .productId(row.getOrderId()) // 또는 null 넣어도 됨
+//            .productName(row.getProductName())
+//            .quantity(row.getQuantity())
+//            .price(row.getPrice())
+//            .total(row.getTotalPrice())
+//            .build()
+//          ).toList();
+
+        return ResponseDto.setSuccess("주문 요약 조회 성공", summary);
+    }
 }
