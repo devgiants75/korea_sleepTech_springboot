@@ -64,5 +64,7 @@ public class PostDataServiceImpl implements PostDataService {
         uf.setFileType(file.getContentType());
         uf.setTargetId(targetId);
         uf.setTargetType(type);
+
+        uploadFileRepository.save(uf);
     }
 }
