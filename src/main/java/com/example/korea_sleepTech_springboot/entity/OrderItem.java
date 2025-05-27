@@ -1,15 +1,13 @@
 package com.example.korea_sleepTech_springboot.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "order_items")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter @Setter
+@AllArgsConstructor
 public class OrderItem {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,4 +21,11 @@ public class OrderItem {
     private Product product;
 
     private int quantity;
+
+    @Builder
+    public OrderItem(Order order, Product product, int quantity) {
+        this.order = order;
+        this.product = product;
+        this.quantity = quantity;
+    }
 }

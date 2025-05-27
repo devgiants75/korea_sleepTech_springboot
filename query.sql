@@ -43,8 +43,7 @@ CREATE TABLE IF NOT EXISTS order_logs (
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
     order_id BIGINT NOT NULL,
     message VARCHAR(255),
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 # 초기 데이터 삽입 스크립트 #
@@ -75,16 +74,26 @@ FROM
     JOIN products p ON oi.product_id = p.id;
 
 # 주문 생성 트리거
-DELIMITER // -- 구분 문자 변경 (기본값 ;)
+DELIMITER //
+
+DROP TRIGGER IF EXISTS trg_after_order_insert;
+
 CREATE TRIGGER trg_after_order_insert
 AFTER INSERT ON orders
 FOR EACH ROW
 BEGIN
-		INSERT INTO order_logs(order_id, message)
-        VALUES (NEW.id, CONCAT('주문이 생성되었습니다. 주문 ID: ', NEW.ID));
+  INSERT INTO order_logs(order_id, message)
+  VALUES (NEW.id, CONCAT('주문이 생성되었습니다. 주문 ID: ', NEW.id));
 END;
 //
+
 DELIMITER ;
+
+SELECT * FROM products;
+SELECT * FROM stocks;
+SELECT * FROM orders;
+SELECT * FROM order_items;
+SELECT * FROM order_logs;
 
 -- test 테이블 --
 CREATE TABLE IF NOT EXISTS test (
