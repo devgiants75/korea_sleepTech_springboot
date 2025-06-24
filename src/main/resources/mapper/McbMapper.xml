@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.korea_sleepTech_springboot.mapper.McbMapper">
+
+    <select id="getUserDetail" resultMap="UserDetailResultMap">
+        SELECT
+        u.user_id,
+        u.name AS user_name,
+        u.phone,
+        r.role_name,
+
+        IFNULL(SUM(p.amount), 0) AS total_amount,
+        (
+            SELECT COUNT(*)
+            FROM passes pass
+            WHERE pass.user_id = u.user_id
+        ) AS total_coupon_count,
+        (
+            SELECT COUNT(*) FROM passes pass
+            WHERE pass.user_id = u.user_id AND pass.used = FALSE
+        ) AS available_coupon_count,
+
+        c.course_id,
+        c.title,
+        c.description,
+        c.course_date,
+        c.course_start_time,
+        c.course_end_time,
+        c.category,
+        c.course_room,
+        c.created_at AS course_created_at,
+        c.updated_at AS course_updated_at,
+        c.trainer_id,
+        tu.name AS trainer_name
+
+        FROM users u
+        JOIN roles r ON u.role_id = r.role_id
+        LEFT JOIN payments p ON u.user_id = p.user_id
+        LEFT JOIN participations pa ON u.user_id = pa.user_id
+        LEFT JOIN courses c ON pa.course_id = c.course_id
+        LEFT JOIN trainer_profiles tp ON c.trainer_id = tp.trainer_id
+        LEFT JOIN users tu ON tp.user_id = tu.user_id
+
+        WHERE u.user_id = #{userId}
+        GROUP BY u.user_id, c.course_id
+    </select>
+
+    <resultMap id="UserDetailResultMap" type="com.example.seniya_back.dto.admin.user.response.GetUserDetailRespDto">
+        <result property="name" column="user_name"/>
+        <result property="phone" column="phone"/>
+        <result property="roleName" column="role_name"/>
+        <result property="totalAmount" column="total_amount"/>
+        <result property="totalCouponCount" column="total_coupon_count"/>
+        <result property="availableCouponCount" column="available_coupon_count"/>
+
+        <collection property="courses" ofType="com.example.seniya_back.dto.admin.course.response.CourseResponseDto">
+            <result property="id" column="course_id"/>
+            <result property="name" column="trainer_name"/>
+            <result property="trainerId" column="trainer_id"/>
+            <result property="title" column="title" />
+            <result property="description" column="description"/>
+            <result property="classDate" column="course_date"/>
+            <result property="classStartTime" column="course_start_time"/>
+            <result property="classEndTime" column="course_end_time"/>
+            <result property="category" column="category"/>
+            <result property="classroom" column="course_room"/>
+            <result property="createdAt" column="course_created_at"/>
+            <result property="updatedAt" column="course_updated_at"/>
+        </collection>
+    </resultMap>
+
+</mapper>
